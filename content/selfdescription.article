@@ -1,0 +1,46 @@
+Self Description - Text
+09 Feb 2015
+Tags: bruteloop, golang, recursion, xkcd
+
+Jon Wear
+
+* text
+
+One of the xkcd.com comics that has really stuck with me over the years is this one:
+
+.image http://imgs.xkcd.com/comics/self_description.png  77 320
+
+The part that inspired me to write some Go code wasn't the image itself, but the hover text which reads as follows:
+
+"The contents of any one panel are dependent on the contents of every panel including itself.  The graph of panel dependencies is complete and bidirectional, and each node has a loop.  *The* *mouseover* *text* *has* *two* *hundred* *and* *forty-two* *characters*."
+
+That was clever.  A bit of text that includes the length of the the text within the text itself.  So, I wrote some program that does it for any text up to 1,000 characters.  It ignores trailing spaces, but other than that, you type and it will append the length of the text (including the length of the text).
+
+I went about it this way:
+
+Calculate the text for a given integer ("one" for 1, "twelve" for 12, "thirty-seven" for 37) & store the length of that text representation.  You can find the loop for this [[https://github.com/genghisjahn/textlength/blob/master/lengthbuilder.go#L5-L13][here]] and the actual functions that convert number representations to text representations in this [[https://github.com/genghisjahn/textlength/blob/master/textlength.go][file]].
+
+Next, I call up my old buddy *brute* *force*. For every text length between 1 and 1,000, I take the text submitted (for example, "Hello World!") and I add the text representation of the current loop integer.  Then I check to see if the actual length of those two bits of text concatenated together equal the length (number wise) of the text form of the number.  If they are equal, great!  I have  a match and return it.  In this case:
+
+  Hello World! This text is fifty-nine characters in length.
+
+It all happens here:
+
+.code selfdescription_demogo.go /^func ProcessText/,/^}/
+
+Make a simple bit of formatting text "%v %v". That's two place holders separated by 2 spaces (thus the + 2 on line 4).  Add the text to position one, add the text of the number to position two, and then see if the total length matches the numeric value of the number you put in position two.
+
+There are more elegant ways, I'm sure.  Even for brute force, you could decide to start your brute loop with the length of the submitted text instead of 1.
+
+That's almost all there is to it.  One thing I discovered is that sometimes, certain lengths of text just won't match up.  You can check everything and nothing will give you that nice recursive bit of text.  I got around that by giving more than one boiler plate phrase.  Instead of just using,  "This text is %v characters in length."
+
+I use two more phrases that say the same thing but have different over all lengths.
+
+  firstParts := []string{"This text is %v characters in length.", "Text is %v characters long.",
+  "Text is %v characters in length."}
+
+So far one of these three phrases has caught every possible length between 1 & 1000. You can tweak the code to go higher if you want.
+
+Code & installation instructions can be found here:
+
+.link https://github.com/genghisjahn/textlength

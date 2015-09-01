@@ -3,6 +3,11 @@
 *.a
 *.so
 
+blog.go
+local.go
+rewrite.go
+content/.DS_Store
+
 # Folders
 _obj
 _test
