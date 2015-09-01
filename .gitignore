@@ -4,6 +4,7 @@
 *.so
 
 *.go
+.DS_Store
 
 # Folders
 _obj
