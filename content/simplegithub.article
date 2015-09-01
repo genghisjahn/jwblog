@@ -1,0 +1,35 @@
+Simple Git configurations for beginners (like me)
+15 Feb 2014
+Tags: git, github
+
+Jon Wear
+
+* text
+
+.image http://imgs.xkcd.com/comics/git_commit.png 182 320
+
+.link https://xkcd.com/1296/ xkcd.com
+
+As the shores of Microsoft disappear over the horizon, I find myself using tools that I used to think of as convoluted command line hacks and black magic.  Things like Git.  Of course, now that' I've used Git for several months in a for real multi-user multi-location environment, I love it.  Not only do I use it, but I'm comfortable enough now that I don't even use the GUI's.  I'm all CLI like the real hipster programmers.
+
+I use Git and [[https://www.github.com][Github]] a lot these days.  It's cool and all but there were the inevitable hickups along the way.  Lots of Googling.   Here's a list of things that I wish had been all in one place when I started.  I provide this for others(my future self included) who might be new to Git/GIthub and want to lessen the learning curve a bit.  These tweaks assume you already have [[http://www.git-scm.com/][Git installed]], a free Github account and an SSH key.  If not, create an account at Github and [[https://help.github.com/articles/generating-ssh-keys#platform-all][follow these steps]] to create an SSH key.  Moving on...
+
+
+These are the problems I ran into early on and how they got fixed plus a few tweaks.
+
+* Every time I do a git push to a repo on Github, I get asked for username and password.
+
+This is most likely because you did a git clone from HTTPS and not SSH.  I'd post a screen shot but the UI will probably change at some point.  Look on the github repo page, find the clone URL and make sure that you are copying the one for SSH.  [[http://stackoverflow.com/questions/6565357/git-push-requires-username-and-password][More Info]].
+
+
+* I make changes on my local branch, but when I push to Github it says, "Everything is up to date" even though it's not.
+
+Instead of doing git push, do
+
+  git push origin <branch name>
+
+example:
+
+  git push origin newfeature
+
+[[http://stackoverflow.com/questions/2936652/git-push-wont-do-anything-everything-up-to-date][More info]]
