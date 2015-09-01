@@ -4,7 +4,7 @@
 *.so
 
 *.go
-.DS_Store
+content/.DS_Store
 
 # Folders
 _obj
