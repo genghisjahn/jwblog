@@ -28,8 +28,42 @@ Instead of doing git push, do
 
   git push origin <branch name>
 
-example:
+as in:
 
   git push origin newfeature
 
 [[http://stackoverflow.com/questions/2936652/git-push-wont-do-anything-everything-up-to-date][More info]]
+
+* I get asked for a pass phrase every time I do a push or pull.
+
+On the command line type:
+- eval $(ssh-agent) <enter>
+- ssh-add <enter>
+
+* Helpful git aliases
+
+You can run these at the command line to make typing git commands a little easier.
+
+- $ git config --global alias.co checkout
+- $ git config --global alias.br branch
+- $ git config --global alias.ci commit
+- $ git config --global alias.st status
+
+_git_ _commit_ becomes _git_ _ci_.  _git_ _checkout_ becomes _git_ _co_ and _git_ _branch_ becomes _git_ _br_.  (These aliases were taken from Scott Charon's book [[http://www.amazon.com/gp/product/B004TTXLGI/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B004TTXLGI&linkCode=as2&tag=theinksmudge-20][Pro Git]]).
+
+* Color!
+
+It's nice to have some color on the command line.  Set this so that the git diff, git status and other commands return some color variation to make things easier to read.
+
+- $ git config --global color.ui true
+- [[http://git-scm.com/book/ch7-1.html#Colors-in-Git][More Info]]
+
+* One more thing
+
+Instead of doing git commit -m 'message' all the time, you can do a git commit -av which will launch the default text editor, let you view the changes that are going into the commit AND type the commit message.  I like using Sublime, so updated the git config to do so.
+
+  git config --global core.editor "subl -n -w"
+
+[[https://help.github.com/articles/using-sublime-text-2-as-your-default-editor][More Info]]
+
+If you see anything wrong, let me know.  Present and future me thanks you, but not past me.  Past me is a corner cutting jerk.
