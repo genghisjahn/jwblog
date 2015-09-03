@@ -1,0 +1,26 @@
+Poor Man's Interface With the Dynamic Keyword
+29 Aug 2013
+Tags: .net, dynamic
+
+Jon Wear
+
+* text
+
+While creating a demo application for an upcoming blog post, I found myself with a method where I copy pasted the same code to work with three different types.  I looked at the code and thought, "I should just create an interface for these small classes and rewrite this as one method that's called with three different types."  But, one type was a reference to an asp.net 2.0 web service type, one was to a local type and one was a dictionary return from a call to a ServiceStack REST call.  If there's  a way to have those classes implement an interface after the fact, I don't know about it.  But without even google/bing-ing a solution, I realized I could make this work by using the [[http://msdn.microsoft.com/en-us/library/dd264736.aspx][dynamic]] keyword.  If all three types had the same method of interest and same signature, I could get away with passing them to the general use method even though they did not implement a common interface or inherit from the same base class.
+
+Let's illustrate with some code:
+
+.html /dynamickeyword/dynamic1.html
+
+I know, I know.  It's bad code, but the save button isn't a lock button, so we can refactor. Furthermore, by using the dynamic keyword, we can refactor to this:
+
+.html /dynamickeyword/dynamic2.html
+
+Much better right?
+And now you can call each the method like this:
+
+.html /dynamickeyword/dynamic3.html
+
+Keep in mind, none of these objects inherit from the same base class or implement the same interface. By convention I made sure that the AddThis method would be called the same way every time.
+
+Nothing magical here, but it might get you out of a bind. I'm not sure that I'd want to put this in production code, at least not for every long, but it works.

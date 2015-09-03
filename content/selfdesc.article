@@ -6,13 +6,13 @@ Jon Wear
 
 * text
 
-One of the xkcd.com comics that has really stuck with me over the years is this one:
+One of the [[https://xkcd.com/688/][xkcd.com]] comics that has really stuck with me over the years is this one:
 
-.image http://imgs.xkcd.com/comics/self_description.png  77 320
+.image http://imgs.xkcd.com/comics/self_description.png  100 350
 
 The part that inspired me to write some Go code wasn't the image itself, but the hover text which reads as follows:
 
-"The contents of any one panel are dependent on the contents of every panel including itself.  The graph of panel dependencies is complete and bidirectional, and each node has a loop.  *The* *mouseover* *text* *has* *two* *hundred* *and* *forty-two* *characters*."
+"The contents of any one panel are dependent on the contents of every panel including itself.  The graph of panel dependencies is complete and bidirectional, and each node has a loop.  *The* *mouseover* *text* *has* *two* *hundred* *and* *forty-two* *characters* ."
 
 That was clever.  A bit of text that includes the length of the the text within the text itself.  So, I wrote some program that does it for any text up to 1,000 characters.  It ignores trailing spaces, but other than that, you type and it will append the length of the text (including the length of the text).
 
@@ -26,7 +26,7 @@ Next, I call up my old buddy *brute* *force*. For every text length between 1 an
 
 It all happens here:
 
-.code selfdescription_demogo.go /^func ProcessText/,/^}/
+.code selfdesc_demogo.go /^func ProcessText/,/^}/
 
 Make a simple bit of formatting text "%v %v". That's two place holders separated by 2 spaces (thus the + 2 on line 4).  Add the text to position one, add the text of the number to position two, and then see if the total length matches the numeric value of the number you put in position two.
 

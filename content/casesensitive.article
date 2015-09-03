@@ -1,0 +1,64 @@
+C# is Case Sensitive...Right?
+24 Jul 2013
+Tags: .net, dapper, dynamic
+
+Jon Wear
+
+* text
+
+Well...yes, of course.  It's well known that C# is case sensitive(interesting discussion on this can be found [[http://stackoverflow.com/questions/494561/why-is-c-sharp-case-sensitive][here]]).  If you declare a variable like this...
+
+  string name = "John";
+
+it will be different than a variable declared this way...
+
+  string nAme = "Smith";
+
+One of the easiest ways to tell if your variables are spelled correctly is to try to compile your project. If your case is off, you'll get an exception at compile time and your code will not run at all. This is different from VB.Net, where variable names are not case sensitive in the VB.Net IDE.
+
+  Dim name as string ="John"
+
+and
+
+  nAME as string="Smith"
+
+is allowed because the  VB.Net IDE ignores the case difference between "name" and "nAME". In VB.Net land, they are the same variable and you can't declare a variable with the same name in the same scope more than once.  Note that the IDE allows you to get away with different cases in VB.Net.  The compiler/CLR take care of case issues later([[http://stackoverflow.com/a/2301980/324586][more here]]).
+
+But while I was using Dapper, I noticed something odd.  Sometimes the case between a class type<T> and the table column matched and sometimes they didn't but Dapper didn't seem to care at all.  But if I called the .Query method without a <T> parameter, then case did matter.
+
+If you call .Query in Dapper without a <T> parameter the method will return IEnumerable of type dynamic.  I didn't know much about dynamic at the time but I assumed this would let you play fast and loose with property names.  But that's not what happens.  Dapper allows mis-matched case when referencing a Type property but if you don't specify a Type and you are dealing with IEnumerable of dynamic types, you have to match case or you get run time exceptions (not compile time exceptions).  This is counter intuitive but that was obviously how it worked.
+
+In this example I specify Type:
+
+  List players = cn.Query<Player>("select * from player");
+
+  Console.Writeline("Player ID: {0}",players.FirstOrDefault().PlayerID);
+
+This works fine even though the column name that the PlayerID is referencing is "playerID".  Column names are not case sensitive in MS SQL, but we're in that twilight zone where  database types are mapped to CLR types.  On the CLR side case sensitivity is going to make itself known.  But it doesn't matter here.  I can rename the column name to pLaYeRiD and it will still match to the property name PlayerID in my Player object.
+
+But in this example, case does matter even though we are returning IEnumerable of dynamic.
+
+  var players = cn.Query("select * from player");
+
+  Console.Writeline("Player ID: {0}",players.FirstOrDefault().PlayerID);
+
+This will throw a run-time exception Microsoft.CSharp.RuntimeBinder.RuntimeBinderException with the text "Could not match up class property with object property."
+
+Weird huh?  Specify a Type and you can play fast and loose with the bindings.  Don't specify a Type, go dynamic, and you have to match the property name case exactly to the the case of the column returned in the record set.
+
+The thing to keep in mind with the dynamic "type" is that it's not really a type.  There is still an underlying type that's the real type.  When you use the dynamic type for a variable, you are saying to the compiler, "I got this.  You don't need to check type whenever you see this variable during compile time."  Does this sound a lot like the object type?  It works exactly the same way in many circumstances.  In fact, dynamic only exists at compile time.  At run time it's converted into type object.  (Read about it [[http://msdn.microsoft.com/en-us/library/vstudio/dd264741.aspx][here on MSDN]]).
+
+So what's Dapper doing behind the scenes here?  Since it's an open source project we don't have to guess, we can look at the source code.  [[https://github.com/SamSaffron/dapper-dot-net/blob/master/Dapper%20NET40/SqlMapper.cs#L3385-L3400][This link]] will show the source code for how Dapper maps a Typed query.  The part we really care about is in the [[https://github.com/SamSaffron/dapper-dot-net/blob/master/Dapper%20NET40/SqlMapper.cs#L3385][GetMember]] method.  If you step through that you'll see how the property names of the class are matched up with field/column names from the returned record set.  The matching is done with the [[http://stackoverflow.com/a/1608192/324586][null coalescing]] operator:
+
+
+  var property = _properties.FirstOrDefault(p => string.Equals(p.Name, columnName, StringComparison.Ordinal))
+               ?? _properties.FirstOrDefault(p => string.Equals(p.Name, columnName, StringComparison.OrdinalIgnoreCase));
+
+
+[[http://stringcomparison.ordial/][StringComparison.Ordinal]] means to compare the strings by comparing a code for each char in the string.  It's fast but culture dependent.  Remember that Dapper was built for speed, so it reasons they chose speed over the ability to by culture independent.  If it finds a match there, great.  If it doesn't then it does the same comparison but with [[http://stringcomparison.ordinalignorecase/][StringComparison.OrdinalIgnoreCase]].  OrdinalIgnoreCase converts each char in both strings to all upper case and then checks for a match.  That's why you don't have to match case when comparing properties of a Type to columns in a returned record set.  If it doesn't find a perfect match the first time, it coverts everything to upper case and checks again.  I suspect matching case on both sides would result in slightly faster return times.  Once a match is made an object of type [[https://github.com/SamSaffron/dapper-dot-net/blob/master/Dapper%20NET40/SqlMapper.cs#L3174][SimpleObjectMap]] is returned.
+
+So what about the dynamic side of things?  It's a lot more straightforward...and convoluted.  [[https://github.com/SamSaffron/dapper-dot-net/blob/master/Dapper%20NET40/SqlMapper.cs#L1635-L1643][Lines 1635-1643]] show where Dapper loops through the columns in the result set and makes a [[https://github.com/SamSaffron/dapper-dot-net/blob/master/Dapper%20NET40/SqlMapper.cs#L1284][DapperTable]] filled with the names of the columns.  If you step through the code you'll see that these are in turn converted to a collection of [[https://github.com/SamSaffron/dapper-dot-net/blob/master/Dapper%20NET40/SqlMapper.cs#L1406][DapperRow]] and this is what is returned to the calling method undercover of dynamic.  The DapperRow class builds "properties" that have the same name and type as the column returned from the database.  Since these are properties, they have to be referred to with matching case.  I could spend a few more posts just on the DapperRow class but that's the gist of how it works.
+
+So case sensitivity holds up like it is supposed to in C#.  If Dapper has a Type to work with in addition to a set of columns, it can make mappings for you even if you get the case wrong.  If you are leaving it up to Dapper to return  the result and and work without a column map you have to make sure the case is right for each property.  Intellisense won't help you.
+
+.image /casesensitive/dynamic.png

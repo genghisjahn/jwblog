@@ -1,0 +1,119 @@
+There are already numerous posts on the web that explain how to do parts of this. &nbsp;Unfortunately, few of them have all of the steps in one post. &nbsp;Windows services are great, but they ain't all that easy to install once you are done developing them.<br />
+<br />
+<i>The following assumes Visual Studio 2008.</i><br />
+<br />
+To create a windows service:<br />
+<br />
+Start a New VB Project<br />
+<br />
+Select <b>Windows</b><br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_H4F5AXk21cU/TC4WgdKZgyI/AAAAAAAAE4E/LUrzetB57N4/s1600/img1.png" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_H4F5AXk21cU/TC4WgdKZgyI/AAAAAAAAE4E/LUrzetB57N4/s1600/img1.png" /></a></div><br />
+<br />
+<br />
+<br />
+<ol></ol><br />
+<br />
+Select Windows Service<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://3.bp.blogspot.com/_H4F5AXk21cU/TC4WiGol-uI/AAAAAAAAE4I/p5UR0VB8AnM/s1600/img2.png" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/_H4F5AXk21cU/TC4WiGol-uI/AAAAAAAAE4I/p5UR0VB8AnM/s1600/img2.png" /></a></div><br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+The once it's created, double click the service1.vb file in the project explorer (or whatever you want to name it). <br />
+<br />
+There are only two sub routines in this file, <i>OnStart() </i>and <i>OnStop()</i>. &nbsp;There are comments inside each subroutine telling you how they should be used.<br />
+<br />
+In order to debug this service, you need to add the following sub routine to the file:<br />
+<code><br />
+Public Sub New()<br />
+<br />
+' This call is required by the Windows Form Designer.<br />
+<br />
+&nbsp;&nbsp; &nbsp; InitializeComponent()<br />
+<br />
+&nbsp;&nbsp; &nbsp; ' Add any initialization after the InitializeComponent() call.<br />
+<br />
+&nbsp;&nbsp; &nbsp; If Debugger.IsAttached = True Then<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Dim tempargs() As String<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Me.OnStart(tempargs)<br />
+<br />
+&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite)<br />
+<br />
+&nbsp;&nbsp; &nbsp; End If<br />
+<br />
+End Sub<br />
+<br />
+</code><br />
+When you debug your service, you’ll actually be able to debug it like a regular console/winforms application. &nbsp;You can leave this code in the application when you release it, since it won’t run if there is no debugger attached.<br />
+<br />
+Now comes the fun part. &nbsp;Services don’t install the regular way: &nbsp;Once you are done with your project, you need to add an Installer to your windows service project &nbsp;Open the designer for the service class. &nbsp;It will look something like this:<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/_H4F5AXk21cU/TC5ADz0xzaI/AAAAAAAAE4M/DUGbB-CBm1c/s1600/addcomp.PNG" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" height="133" src="http://1.bp.blogspot.com/_H4F5AXk21cU/TC5ADz0xzaI/AAAAAAAAE4M/DUGbB-CBm1c/s320/addcomp.PNG" width="320" /></a></div><br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+Right click somewhere in the gray area and select Add Installer:<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/_H4F5AXk21cU/TC5ANQUK8pI/AAAAAAAAE4Q/bv3lDRPn15E/s1600/addinstall.PNG" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/_H4F5AXk21cU/TC5ANQUK8pI/AAAAAAAAE4Q/bv3lDRPn15E/s1600/addinstall.PNG" /></a></div><br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+Give it a NAME! &nbsp;Don’t leave it as Installer1.vb. &nbsp;Call it Install<project>.vb or something like that. &nbsp;</project>Double click your new install file (it’s in the solution explorer) and look at the designer view. &nbsp;You should see a message stating that you should add components. &nbsp;Right click the tool box and select “Choose Items”<br />
+<br />
+Wait a while so that VS can come up with the list of components. &nbsp;This make take a bit. &nbsp;There’s no progress bar so you’ll just have to wait.<br />
+<br />
+Once the list comes up, scroll down to the S’es and select ServiceInstaller and ServiceProcessInstaller. &nbsp;Click okay and you should see them in your tool box.<br />
+<br />
+<br />
+<ol><li>Drag a ServiceInstaller to the&nbsp;Designer</li>
+<li>Drag a ServiceProcessInstaller to the&nbsp;Designer</li>
+<li>Click on the ServiceProcessInstaller1 control</li>
+<ol><li>Make sure the Parent Property is set to the name of your Installer Class (It’s the installer file you added to the solution explorer). &nbsp;If you click Parent you should see a drop down list of classes. &nbsp;Choose the installer class you added.</li>
+</ol><li>Click the ServiceInstaller1 control</li>
+<li>Make sure the Parent Property is set to the name of your Installer Class (It’s the installer file you added to the solution explorer). &nbsp;If you click Parent you should see a drop down list of classes. &nbsp;Choose the installer class you added.</li>
+<li>Type the description of the service. (This will show up in the Services MMC window with all the other installed services).</li>
+<li>Type the DisplayName. (This will show up in the Services MMC window with all the other installed services).</li>
+<li>Type the ServiceName. (I believe this is the name of the process that will show up in Task Manager)</li>
+<li>Set the Startup Type (Automatic, Manual or Disabled) &nbsp;You’ll probably want Automatic.</li>
+<li>Change the compile option from Debug to Release.</li>
+<li><i>Now</i>&nbsp;you are ready to compile and install.</li>
+<li><b>Build</b> the application. &nbsp;Do no publish it.</li>
+<ol><li>Make sure that the server you will run this on has .NET 3.5 SP1. &nbsp;If it does not, you’ll have to install it on that server before continuing.</li>
+</ol><li>Copy your release directory to that server.</li>
+<li>RDP to that server and open a command prompt.</li>
+<li>Change directory to C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727</li>
+<li>That is not a mistake, it should be the v2 directory.</li>
+<li>Run the following command:</li>
+<li>Installutil.exe (followed by the path to the exe you setup in step 13).</li>
+<li>If you selected the service to run as a User you’ll get a pop up asking for the user credentials.</li>
+</ol>If everything installed correctly, you should see a bunch of text that ends with this:<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/_H4F5AXk21cU/TC5BtYd_bgI/AAAAAAAAE4U/D3oupimPexg/s1600/cmd.png" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" height="115" src="http://4.bp.blogspot.com/_H4F5AXk21cU/TC5BtYd_bgI/AAAAAAAAE4U/D3oupimPexg/s640/cmd.png" width="640" /></a></div><br />
+<br />
+<br />
+<br />
+Open up the Services MMC and you should see your service installed.<br />
+<br />
+Be sure to start it.<br />
+<br />
+There you go. &nbsp;Now you can run windows services instead of constantly writing console applications that are fired off every five minutes from the Windows Task Scheduler.
