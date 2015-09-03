@@ -5,7 +5,7 @@
 
 blog.go
 local.go
-rewrite.go
+# rewrite.go
 content/.DS_Store
 
 # Folders
