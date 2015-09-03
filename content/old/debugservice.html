@@ -1,0 +1,26 @@
+Perhaps this is helpful, perhaps not. &nbsp;I've spent the last 45 min looking over various blog posts and .Net sites trying to find an easy way to debug an NT service. &nbsp;I kept coming across, install the serivce, start it, attached &nbsp;a debugger to a process...etc. &nbsp;I know there is an easy way to do it because I've used it several years ago in .Net 1.1. &nbsp;I gave up searching and went looking through old source code and found it. 'Tis below:<br />
+<div></div><div><br />
+<code><br />
+'****Modified by JWear on 4/12/2006****</code><br />
+<code>Private Sub New()<br />
+If Debugger.IsAttached = True Then<br />
+' debug code: allows the process to run as a non-service<br />
+' will kick off the service start point, but never kill it.<br />
+' shut down the debugger to exit<br />
+'Open this page for help '                   'http://www.codeproject.com/dotnet/DebugWinServices.asp<br />
+Dim service As New YourService<br />
+Dim tempargs() As String<br />
+service.OnStart(tempargs)<br />
+System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite)<br />
+Else<br />
+'Original Code Below<br />
+ServicesToRun = New System.ServiceProcess.ServiceBase() {New YourService}</code><br />
+<br />
+<code> </code><code>System.ServiceProcess.ServiceBase.Run(ServicesToRun)<br />
+'Original Code Above<br />
+End If<br />
+'**************<br />
+</code><br />
+<code>End Sub</code><br />
+<br />
+</div><div>I left the page where I got it in the comments, a hat tip to the original site.  The page is no longer available.</div>
