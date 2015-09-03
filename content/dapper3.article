@@ -2,6 +2,8 @@ Getting Started With Dapper Part 3
 12 Jul 2013
 Tags: .net, dapper, screencast
 
+Jon Wear
+
 * text
 
 In part three I cover how to use alternate constructors for types used with Dapper. In parts 1 & 2 I used the default parameterless constructor but that doesn't work in every situation.
