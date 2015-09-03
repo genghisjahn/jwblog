@@ -1,0 +1,11 @@
+Getting Started With Dapper Part 2
+28 Jun 2013
+Tags: .net, dapper, IEumerable, screencast
+
+* text
+
+This video is part 2 of a very basic introduction to the micro ORM Dapper for use with the .Net platform.  I go over IEnumerable and how it relates to Dapper, as well as demonstrating several different classes that implement IEnumerable (Lists, Arrays, Dictionaries).
+
+I also go over what happens with .First and .FirstOrDefault when used with Dapper/IEnumerable and how the behavior can be different for value types vs. reference types.
+
+.html /dapper2/vimeo.html
