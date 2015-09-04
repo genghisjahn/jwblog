@@ -17,6 +17,20 @@ func init() {
 }
 
 var urlMap = map[string]string{
+	"/2011/04/web-service-minutiae.html":                   "webservice",
+	"/2011/01/b-is-for-backup.html":                        "backup",
+	"/2010/12/new-laptop.html":                             "newlaptop",
+	"/2010/10/looking-forward.html":                        "lookingforward",
+	"/2010/10/try-kindle.html":                             "kindle",
+	"/2010/10/wrong-major.html":                            "wrongmajor",
+	"/2010/08/time-keeps-on-slippin.html":                  "timeslipping",
+	"/2010/05/im-on-iphonegraphy-today.html":               "iphoneog",
+	"/2010/05/learning-about-twitter.html":                 "twitter",
+	"/2010/05/starting-blog.html":                          "startblog",
+	"/2010/04/iphone-images.html":                          "iphoneimages",
+	"/2010/04/time-to-learn.html":                          "timetolearn",
+	"/2010/04/twitter-feeds-for-websites-that-dont.html":   "twitterfeeds",
+	"/2010/03/numlock-morse-code.html":                     "morsecode",
 	"/2009/05/auto-complete-example-project.html":          "ace",
 	"/2009/05/more-autocomplete.html":                      "moreace",
 	"/2009/02/auto-complete-on-google-search.html":         "acegsa",
