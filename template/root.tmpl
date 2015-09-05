@@ -116,7 +116,7 @@
 function searchblog() {
 	var siteinfo = "site:www.jonwear.com ";
 	var query = $('#search').val();
-	query = siteinfo + query;
+	query = siteinfo + '+' + query;
 	$('#search').val(query);
 }
 </script>
