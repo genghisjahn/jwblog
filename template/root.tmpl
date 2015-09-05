@@ -60,7 +60,7 @@
 <form method="GET" action="{{.GodocURL}}">
 <div id="menu">
 <a href="{{.BasePath}}/">Blog</a>
-<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+<input type="text" id="search" name="q" class="inactive" value="Search" onKeydown="if (event.keyCode==13) searchblog();" placeholder="Search">
 </div>
 </form>
 
@@ -95,7 +95,7 @@
 	<h1><a href="{{.BasePath}}/">jon wear's personal website</a></h1>
 	{{template "content" .}}
 </div><!-- #content -->
-
+<input type="button" value="TEST" id="temp" onclick="searchblog();" />
 <div id="footer">
 	<p>
 	The content of this page is licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons
@@ -112,6 +112,14 @@
 <script src="/lib/godoc/playground.js"></script>
 <script src="/lib/godoc/play.js"></script>
 <script src="/lib/godoc/godocs.js"></script>
+<script>
+function searchblog() {
+	var siteinfo = "site:www.jonwear.com ";
+	var query = $('#search').val();
+	query = siteinfo + query;
+	$('#search').val(query);
+}
+</script>
 <script>
 $(function() {
 	// Insert line numbers for all playground elements.
