@@ -19,8 +19,6 @@ import (
 
 const hostname = "www.jonwear.com" // default hostname for blog server
 
-var SearchURL = "https://www.google.com/?gws_rd=ssl#q=site:www.jonwear.com+"
-
 var config = blog.Config{
 	Hostname:     hostname,
 	BaseURL:      "//" + hostname,
@@ -28,7 +26,7 @@ var config = blog.Config{
 	HomeArticles: 5,  // articles to display on the home page
 	FeedArticles: 10, // articles to include in Atom and JSON feeds
 	PlayEnabled:  true,
-	FeedTitle:    "Jon Wear's personal blog",
+	FeedTitle:    "jon wear's personal website",
 }
 
 func init() {
