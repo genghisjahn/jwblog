@@ -58,9 +58,10 @@
 <div class="top-heading" id="heading-narrow"><a href="{{.GodocURL}}/">Go</a></div>
 <a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
 <form method="GET" action="{{.GodocURL}}">
+<input type="hidden" id="cx" name="cx" value="015984216991226391701:qq90bamj6xc"/>
 <div id="menu">
 <a href="{{.BasePath}}/">Blog</a>
-<input type="text" id="search" name="q" class="inactive" value="Search" onKeydown="if (event.keyCode==13) searchblog();" placeholder="Search">
+<input type="text" id="search" name="q" class="inactive" value="Search"  placeholder="Search">
 </div>
 </form>
 
@@ -93,9 +94,9 @@
 
 <div id="content">
 	<h1><a href="{{.BasePath}}/">jon wear's personal website</a></h1>
+
 	{{template "content" .}}
 </div><!-- #content -->
-<input type="button" value="TEST" id="temp" onclick="searchblog();" />
 <div id="footer">
 	<p>
 	The content of this page is licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons
@@ -112,14 +113,6 @@
 <script src="/lib/godoc/playground.js"></script>
 <script src="/lib/godoc/play.js"></script>
 <script src="/lib/godoc/godocs.js"></script>
-<script>
-function searchblog() {
-	var siteinfo = "site:www.jonwear.com ";
-	var query = $('#search').val();
-	query = siteinfo + '+' + query;
-	$('#search').val(query);
-}
-</script>
 <script>
 $(function() {
 	// Insert line numbers for all playground elements.
