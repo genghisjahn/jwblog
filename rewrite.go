@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 )
@@ -39,7 +38,6 @@ func init() {
 
 	for p := range urlMap {
 		dest := "/" + urlMap[p]
-		log.Println(dest)
 		http.HandleFunc(p, func(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, dest, http.StatusMovedPermanently)
 		})

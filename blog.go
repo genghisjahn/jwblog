@@ -36,7 +36,6 @@ func init() {
 		http.Redirect(w, r, "/", http.StatusFound)
 	}
 	http.HandleFunc("/blog", redirect)
-	http.HandleFunc("/blog/", redirect)
 
 	http.Handle("/lib/godoc/", http.StripPrefix("/lib/godoc/", http.HandlerFunc(staticHandler)))
 }
