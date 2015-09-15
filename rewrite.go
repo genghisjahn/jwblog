@@ -22,7 +22,7 @@ type rItem struct {
 
 // Register HTTP handlers that redirect old blog paths to their new locations.
 func init() {
-	file, e := ioutil.ReadFile("rewrites.json")
+	file, e := ioutil.ReadFile("../blogcontent/rewrites.json")
 	if e != nil {
 		fmt.Printf("File error: %v\n", e)
 		os.Exit(1)
