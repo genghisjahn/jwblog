@@ -22,7 +22,7 @@ const hostname = "www.jonwear.com" // default hostname for blog server
 var config = blog.Config{
 	Hostname:     hostname,
 	BaseURL:      "//" + hostname,
-	GodocURL:     "https://cse.google.com/cse/publicurl",
+	GodocURL:     "https://cse.google.com:443/cse/publicurl?cx=015984216991226391701:qq90bamj6xc",
 	HomeArticles: 5,  // articles to display on the home page
 	FeedArticles: 10, // articles to include in Atom and JSON feeds
 	PlayEnabled:  true,
