@@ -1,0 +1,19 @@
+Sample Post
+15 Sep 2015
+Tags: comma, delimited, tags
+
+Gustava Gopher
+
+* text
+
+This is what a blog post looks like.  You can look up the markup for the Go Present .Article format here:
+
+.link https://godoc.org/golang.org/x/tools/present
+
+You can find examples of stuff in the actual golang blog here:
+.link https://github.com/golang/blog/content
+
+
+Everything below this is imported from an .HTML file outside of this article file.
+
+.html /old/sample.html
