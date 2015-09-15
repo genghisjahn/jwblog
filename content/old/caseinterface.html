@@ -1,0 +1,194 @@
+"I don't get interfaces. &nbsp;If I need a method in a class I'll put the method in the class. &nbsp;Why waste time putting the method definition in another file and then write the code I was going to anyway in the class definition?"<br />
+<br />
+I may or may not have said something like this at some point in my software career. &nbsp;I have certainly heard the usefulness of interfaces questioned over the years. &nbsp;The questioners are almost always self taught developers, such as myself who have managed to write gobs of decent applications without ever seeing the need for an interface. &nbsp;The fact that the .Net framework is littered with them ought to be a clue that somebody who was smart enough to build the .Net framework thought they were useful. <br />
+<br />
+But we're not building a new framework, are we? &nbsp;We're building text over data apps, right? &nbsp;Who needs 'em?<br />
+<br />
+We all do. &nbsp;In the words of Fire Marshall Bill, "Let me show you something."<br />
+<br />
+It's my first day on the job/project/team and I've been given a task. &nbsp;The task is simple:<br />
+<br />
+Build a method that takes in a last name and first name argument and returns a list of customers that start with the name arguments.<br />
+<br />
+Easy! <br />
+<br />
+I write a stored procedure, then I add a Linq To SQL designer, drag the stored procedure onto it and I'm done in four lines of code:<br />
+<br />
+<br />
+<!-- HTML generated using hilite.me --><br />
+<div style="background-color: white; background-position: initial initial; background-repeat: initial initial; border: solid gray; overflow: auto; padding: 0.2em 0.6em; width: auto;">
+<pre style="margin: 0px;"><span style="color: black; line-height: 125%;"><span style="color: #0000aa;">static</span> List&lt;GetCustomersResult&gt; GetCustomers(<span style="color: #00aaaa;">string</span> lastname,<span style="color: #00aaaa;">string</span> firstname)
+        {
+            List&lt;GetCustomersResult&gt; result = <span style="color: #0000aa;">new</span> List&lt;GetCustomersResult&gt;();
+            lqDataContext lq = <span style="color: #0000aa;">new</span> lqDataContext();
+            result = lq.GetCustomers(lastname, firstname).ToList();
+            <span style="color: #0000aa;">return</span> result;
+        }</span><span style="white-space: normal;">
+</span></pre>
+</div>
+<br />
+I'm all happy until the person who tells me what to do comes by and looks at it and says, "Oh, well that will work for this department, but if I want to search for new customers, they are in a flat file. &nbsp;They are there for a week or so until they get processed into the main customer database. &nbsp;And we also have separate customer databases from companies we bought back in the 90s. &nbsp;One is in Access, another is in Fire Fox."<br />
+<br />
+"You mean Fox Pro?" I ask.<br />
+<br />
+"Fox Pro, yeah. &nbsp;Fire Fox is the Internet Explorer, I forgot. &nbsp;Anyway there are those and maybe some others I'm forgetting about."<br />
+<br />
+I smile, nod and turn back to my four lines of code. &nbsp;This isn't going to cut it.<br />
+<i><br /></i>
+<i>Quick Aside: The above exchange was the&nbsp;obligatory&nbsp;"All Managers R Stupid" joke. &nbsp;Your&nbsp;manager&nbsp;most likely&nbsp;is not&nbsp;stupid, they most likely have a whole host of problems that would keep you up screaming at night. &nbsp;In fact, it probably keeps them up screaming at night.</i><br />
+<br />
+So in almost no time at all, this project has grown from one data source to at least three. &nbsp;As&nbsp;additional&nbsp;meetings happen, there could very well be more. &nbsp;If I've done my job well, it's entirely possible that other departments will hear about it and want to add their subset of customer records to this process. &nbsp;There's no telling how many data sources this will ultimately use. &nbsp;All of them will could have different connection info.<br />
+<br />
+Here's where I can use an interface to make things easier. &nbsp;Now, if you keep scrolling it may <i>look</i>&nbsp;like this is more complicated, but I'm saving myself a lot of future trouble. &nbsp;This particular boss has already proven to be a <a href="http://pokerterms.com/slowroll.html">slow roller</a> with the requirements, so an ounce of prevention...<br />
+<br />
+First, I create an interface with one required method:<br />
+<!-- HTML generated using hilite.me --><br />
+<div style="background: #ffffff; background: white; border-width: .1em .1em .1em .8em; border: solid gray; color: black; overflow: auto; padding: .2em .6em; width: auto;">
+<pre style="line-height: 125%; margin: 0;"><span style="color: #0000aa;">public</span> <span style="color: #0000aa;">interface</span> ICustomerGetter
+    {
+        List&lt;Customer&gt; GetCustomers(<span style="color: #00aaaa;">string</span> lastname, <span style="color: #00aaaa;">string</span> firstname);
+    }
+</pre>
+</div>
+<br />
+<i>Quick Aside: All an interface does is list methods that a class has to have if it's going to implement the interface. &nbsp;It doesn't contain any of the innards, just how methods must be called and what will be returned.</i><br />
+<br />
+Second, I create a simple <a href="http://en.wikipedia.org/wiki/Plain_Old_CLR_Object">POCO</a> to hold the customer info:<br />
+<br />
+<!-- HTML generated using hilite.me --><br />
+<div style="background: #ffffff; background: white; border-width: .1em .1em .1em .8em; border: solid gray; color: black; overflow: auto; padding: .2em .6em; width: auto;">
+<pre style="line-height: 125%; margin: 0;"><span style="color: #0000aa;">public</span> <span style="color: #0000aa;">class</span> <span style="color: #00aa00; text-decoration: underline;">Customer</span>
+    {
+        <span style="color: #0000aa;">public</span> <span style="color: #00aa00;">Customer</span>() { }
+        <span style="color: #0000aa;">public</span> <span style="color: #00aa00;">Customer</span>(<span style="color: #00aaaa;">int</span> customerID, <span style="color: #00aaaa;">string</span> lastname, <span style="color: #00aaaa;">string</span> firstname, DateTime createdon)
+        {
+            <span style="color: #0000aa;">this</span>.customerID = customerID;
+            <span style="color: #0000aa;">this</span>.lastname = lastname;
+            <span style="color: #0000aa;">this</span>.firstntame = firstname;
+            <span style="color: #0000aa;">this</span>.createdon = createdon;
+        }
+        <span style="color: #0000aa;">public</span> <span style="color: #00aaaa;">int</span> customerID { <span style="color: #0000aa;">get</span>; <span style="color: #0000aa;">set</span>; }
+        <span style="color: #0000aa;">public</span> <span style="color: #00aaaa;">string</span> lastname { <span style="color: #0000aa;">get</span>; <span style="color: #0000aa;">set</span>; }
+        <span style="color: #0000aa;">public</span> <span style="color: #00aaaa;">string</span> firstntame { <span style="color: #0000aa;">get</span>; <span style="color: #0000aa;">set</span>; }
+        <span style="color: #0000aa;">public</span> DateTime createdon { <span style="color: #0000aa;">get</span>; <span style="color: #0000aa;">set</span>; }
+    }
+</pre>
+</div>
+<br />
+Third I create a SQLGetter Class.  It implements the ICustomerGetter interface, and has some extra stuff in it to keep track of query strings and linq to sql type stuff.  Since it implements the ICustomerGetter interface, it has to have a method called GetCustomers that takes a string lastname and firstname parameters and returns a typed list of customers.  The interface says I have to have it, how I must call it and what it must return.  What goes on in the middle is up to me.
+<br />
+<!-- HTML generated using hilite.me --><br />
+<div style="background-color: white; background-position: initial initial; background-repeat: initial initial; border: solid gray; overflow: auto; padding: 0.2em 0.6em; width: auto;">
+<pre style="margin: 0px;"><span style="color: black; line-height: 125%;"><span style="color: #0000aa;">public</span> <span style="color: #0000aa;">class</span> <span style="color: #00aa00; text-decoration: underline;">SQLGetter</span> : ICustomerGetter
+    {
+        <span style="color: #00aaaa;">string</span> cn = <span style="color: #aa5500;">""</span>;
+        <span style="color: #0000aa;">public</span> <span style="color: #00aa00;">SQLGetter</span>(<span style="color: #00aaaa;">string</span> ConnectionString)
+        {
+            cn = ConnectionString;
+        }
+        <span style="color: #0000aa;">public</span> List&lt;Customer&gt; GetCustomers(<span style="color: #00aaaa;">string</span> lastname, <span style="color: #00aaaa;">string</span> firstname)
+        {
+            List&lt;Customer&gt; result = <span style="color: #0000aa;">new</span> List&lt;Customer&gt;();
+            lqDataContext lq = <span style="color: #0000aa;">new</span> lqDataContext(cn);</span></pre>
+<pre style="margin: 0px;"><span style="color: black; line-height: 125%;">            lq.Open();
+            <span style="color: #00aaaa;">var</span> dbcurrentcustomers = lq.GetCustomers(lastname, firstname).ToList();
+            <span style="color: #0000aa;">foreach</span> (<span style="color: #00aaaa;">var</span> i <span style="color: #0000aa;">in</span> dbcurrentcustomers)
+            {
+                result.Add(<span style="color: #0000aa;">new</span> Customer(i.customerID, i.lastname, i.firstname, i.createdon));
+            }</span></pre>
+<pre style="margin: 0px;"><pre><span style="color: black; line-height: 21px;">            lq.Close();</span></pre>
+<span style="color: black; line-height: 125%;">
+            <span style="color: #aaaaaa; font-style: italic;">/* You could remove the above foreach loop and use the following Lamba expression.  </span>
+<span style="color: #aaaaaa; font-style: italic;">             * It accomplishes the same thing.</span>
+<span style="color: #aaaaaa; font-style: italic;">             * </span>
+<span style="color: #aaaaaa; font-style: italic;">             * result = dbcurrentcustomers.ConvertAll(i =&gt; new Customer(i.customerID, i.lastname, i.firstname, i.createdon));             </span>
+<span style="color: #aaaaaa; font-style: italic;">             * </span>
+<span style="color: #aaaaaa; font-style: italic;">            */</span>
+            <span style="color: #0000aa;">return</span> result;
+        }
+    }</span><span style="white-space: normal;">
+</span></pre>
+</div>
+Fourth, I build my flat text file getter. &nbsp;I create a new class called FileGetter that implements ICustomerGetter. &nbsp;This class takes a string path argument when it's instantiated, it implements the GetCustomers method as required and looks through a text file to find matching records. &nbsp;It looks like this:<br />
+<br />
+<!-- HTML generated using hilite.me --><br />
+<div style="background-color: white; background-position: initial initial; background-repeat: initial initial; border: solid gray; overflow: auto; padding: 0.2em 0.6em; width: auto;">
+<pre style="margin: 0px;"><span style="color: black; line-height: 125%;"><span style="color: #0000aa;">public</span> <span style="color: #0000aa;">class</span> <span style="color: #00aa00; text-decoration: underline;">FileGetter</span>:ICustomerGetter
+    {
+        <span style="color: #0000aa;">private</span> <span style="color: #00aaaa;">string</span> path;
+        <span style="color: #0000aa;">public</span> <span style="color: #00aa00;">FileGetter</span>(<span style="color: #00aaaa;">string</span> path)
+        {
+            <span style="color: #0000aa;">this</span>.path = path;
+        }
+        <span style="color: #0000aa;">public</span> List&lt;Customer&gt; GetCustomers(<span style="color: #00aaaa;">string</span> lastname, <span style="color: #00aaaa;">string</span> firstname)
+        {
+            List&lt;Customer&gt; result = <span style="color: #0000aa;">new</span> List&lt;Customer&gt;();
+            <span style="color: #00aaaa;">var</span> customers = System.IO.File.ReadAllLines(path);
+            <span style="color: #0000aa;">foreach</span> (<span style="color: #00aaaa;">string</span> c <span style="color: #0000aa;">in</span> customers)
+            {
+                <span style="color: #00aaaa;">string</span>[] custdata = c.Split(<span style="color: #aa5500;">','</span>);
+                Customer customeritem = <span style="color: #0000aa;">new</span> Customer(Convert.ToInt32(custdata[<span style="color: #009999;">0</span>]), custdata[<span style="color: #009999;">1</span>], custdata[<span style="color: #009999;">2</span>], <span style="color: #0000aa;">new</span> DateTime());
+                <span style="color: #0000aa;">if</span> (customeritem.lastname.StartsWith(lastname) &amp;&amp; customeritem.firstntame.StartsWith(firstname))
+                {
+                    result.Add(customeritem);
+                }
+            }
+            <span style="color: #0000aa;">return</span> result;
+        }
+    }</span><span style="white-space: normal;">
+</span></pre>
+</div>
+<br />
+Fifth, I create a method that does the main search. &nbsp;It looks something like this:<br />
+<br />
+<!-- HTML generated using hilite.me --><br />
+<div style="background-color: white; background-position: initial initial; background-repeat: initial initial; border: solid gray; overflow: auto; padding: 0.2em 0.6em; width: auto;">
+<pre style="margin: 0px;"><span style="color: black; line-height: 125%;"><span style="color: #0000aa;">static</span> List&lt;Customer&gt; GetMainCustomers(List&lt;ICustomerGetter&gt; getters, <span style="color: #00aaaa;">string</span> lastname,<span style="color: #00aaaa;">string</span> firstname)
+        {
+            List&lt;Customer&gt; result = <span style="color: #0000aa;">new</span> List&lt;Customer&gt;();
+            <span style="color: #0000aa;">foreach</span> (<span style="color: #00aaaa;">var</span> g <span style="color: #0000aa;">in</span> getters)
+            {
+                result.AddRange(g.GetCustomers(lastname, firstname));
+            }
+
+            <span style="color: #aaaaaa; font-style: italic;">/* Below is another lamba expression.  Nothing scary here.</span>
+<span style="color: #aaaaaa; font-style: italic;">             * It's just returning the result list so that the items are ordered by lastname,firstname.</span>
+<span style="color: #aaaaaa; font-style: italic;">             * */</span>
+            <span style="color: #0000aa;">return</span> result.OrderBy(ln =&gt; ln.lastname).ThenBy(fn =&gt; fn.firstntame).ToList();
+        }</span><span style="white-space: normal;">
+</span></pre>
+</div>
+<br />
+<br />
+This GetMainCustomers method takes three arguments, a list of objects that implement ICustomerGetter, a string for lastname and for firstname. &nbsp;The cool thing about the first argument is that the getter objects don't have to be the same type. &nbsp;All they have to do is properly implement the ICustomerGetter interface. &nbsp;They could have different properties, and all sorts of things but as long as they&nbsp;implement&nbsp;everything in the interface, our GetMainCustomers method is happy.<br />
+<br />
+Now, we loop through each ICustomerGetter object, do the search and return the results.<br />
+<br />
+Lastly, the calling method would look like this:<br />
+<br />
+<!-- HTML generated using hilite.me --><br />
+<div style="background: #ffffff; background: white; border-width: .1em .1em .1em .8em; border: solid gray; color: black; overflow: auto; padding: .2em .6em; width: auto;">
+<pre style="line-height: 125%; margin: 0;"><span style="color: #0000aa;">static</span> <span style="color: #0000aa;">void</span> <span style="color: #00aa00;">Main</span>(<span style="color: #00aaaa;">string</span>[] args)
+        {
+            <span style="color: #00aaaa;">string</span> cn = Properties.Settings.Default.customerdataConnectionString.ToString();
+            SQLGetter sqlgetter = <span style="color: #0000aa;">new</span> SQLGetter(cn);
+            FileGetter fgetter = <span style="color: #0000aa;">new</span> FileGetter(<span style="color: #aa5500;">@"c:\temp\customers.txt"</span>);
+
+            List&lt;ICustomerGetter&gt; getters = <span style="color: #0000aa;">new</span> List&lt;ICustomerGetter&gt;();
+            getters.Add(sqlgetter);
+            getters.Add(fgetter);
+
+            List&lt;Customer&gt; customers = GetMainCustomers(getters,<span style="color: #aa5500;">"B"</span>, <span style="color: #aa5500;">"D"</span>);
+        }
+</pre>
+</div>
+<br />
+Now that we've done all this work, what does it give us? <br />
+<br />
+Well, now we can add new customer getters for Access and FoxPro just by making sure they properly implement the ICustomerGetter interface. &nbsp;We can create multiple instances of each object if there happen to be more than one source file for Access or the text file. <br />
+<br />
+We can also decide to call the method with just one getter if we only wanted new customers from the text file getter, or if we only wanted current customers from the SQL getter.<br />
+<br />
+We can also easily test this code by building hard coded values to see what would happen under certain circumstances. &nbsp;Let's say one of the text files doesn't have an ID in the first position, or maybe we want to add rules to make sure that the customerID field is always unique, we could make tests that force the method to deal with items with non-unique IDs.<br />
+<br />
+So there you go, that's why you might want to use an interface. &nbsp;It helps you plan for the unknown.

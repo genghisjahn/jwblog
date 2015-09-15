@@ -1,0 +1,15 @@
+Getting Started With Dapper Part 3
+12 Jul 2013
+Tags: .net, dapper, screencast
+
+Jon Wear
+
+* text
+
+In part three I cover how to use alternate constructors for types used with Dapper. In parts 1 & 2 I used the default parameterless constructor but that doesn't work in every situation.
+
+Dapper can also make use of a constructor that matches the type and field names returned in a recordset in addition to completely custom constructors that don't mach up to returned recordsets.
+
+Lastly, I cover how to use a custom constructor and initialize a property during the Dapper mapping using Ling and a simple lambda expression.
+
+.html /dapper3/vimeo.html
