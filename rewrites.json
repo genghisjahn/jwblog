@@ -1,0 +1,10 @@
+[
+   {
+      "url":"path/to/url1",
+      "article":"name1"
+   },
+   {
+      "url":"another/url2",
+      "article":"name2"
+   }
+]
