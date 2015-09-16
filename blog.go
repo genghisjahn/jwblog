@@ -17,16 +17,16 @@ import (
 	_ "golang.org/x/tools/playground"
 )
 
-const hostname = "www.jonwear.com" // default hostname for blog server
+const hostname = "SAMPLE_BLOG_UPDATE_THI" // default hostname for blog server
 
 var config = blog.Config{
 	Hostname:     hostname,
 	BaseURL:      "//" + hostname,
-	GodocURL:     "https://cse.google.com/cse/publicurl",
-	HomeArticles: 5,  // articles to display on the home page
-	FeedArticles: 10, // articles to include in Atom and JSON feeds
+	GodocURL:     "https://cse.google.com", //Read about cse to add search to your blog
+	HomeArticles: 5,                        // articles to display on the home page
+	FeedArticles: 10,                       // articles to include in Atom and JSON feeds
 	PlayEnabled:  true,
-	FeedTitle:    "jon wear's personal website",
+	FeedTitle:    "SAMPLE_BLOG_UPDATE_THIS",
 }
 
 func init() {
