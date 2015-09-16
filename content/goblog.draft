@@ -45,6 +45,10 @@ Run
 
   git clone blahblahblah
 
+From inside the cloned directory run:
+
+  go get
+
 ** Build the binary
 
   go build blog.go local.go rewrite.go
