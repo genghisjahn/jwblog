@@ -6,7 +6,7 @@ Jon Wear
 
 * temp
 
-_This_post_is_based_on_a_talk_I_gave_at_the_ [[http://go-talks.appspot.com/github.com/genghisjahn/gobloggo/talk.slide#1][Philly Go Meetup]] _on_September_ 8th_ .
+_This_post_is_based_on_a_talk_I_gave_at_the_ [[http://go-talks.appspot.com/github.com/genghisjahn/gobloggo/talk.slide#1][Philly Go Meetup]] _on_September_ _8th_ .
 
 Now that I have my blog running using the same blog engine that [[blog.golang.org][http://blog.golang.org]] uses, I thought I'd write up a post to explain what I did and how you can to, if you're so inclined.
 
