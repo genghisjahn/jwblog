@@ -16,4 +16,4 @@ You can find examples of stuff in the actual golang blog here:
 
 Everything below this is imported from an .HTML file outside of this article file.
 
-.html /old/sample.html
+.html /html/sample.html
