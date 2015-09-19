@@ -43,7 +43,7 @@ Be sure to set your [[https://golang.org/doc/code.html#GOPATH][GOPATH]]
 
 Download the code from here:
 
-  .link https://github.com/genghisjahn/jwblog/releases/tag/v1.1
+.link https://github.com/genghisjahn/jwblog/releases/tag/v1.1
 
 I recommend that you make your own git repo with the release code.  Be sure to keep the BSD license in place.
 
