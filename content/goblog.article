@@ -8,11 +8,11 @@ Jon Wear
 
 _This_post_is_based_on_a_talk_I_gave_at_the_ [[http://go-talks.appspot.com/github.com/genghisjahn/gobloggo/talk.slide#1][Philly Go Meetup]] _on_September_ _8th_ .
 
-Now that I have my blog running using the same blog engine that [[blog.golang.org][http://blog.golang.org]] uses, I thought I'd write up a post to explain what I did and how you can to, if you're so inclined.
+Now that I have my blog running using the same blog engine that [[blog.golang.org][http://blog.golang.org]] uses, I thought I'd write up a post to explain how I did it.
 
 ** Get a server
 
-You gotta host it somewhere.  I used [[http://www.scaleway.com][www.scaleway.com]].  I got linux server enough power to run my lowly blog:
+You gotta host it somewhere.  I used [[http://www.scaleway.com][www.scaleway.com]].  I got a Linux server with enough power to run my lowly blog:
 
 - 4 Cores @1.3GHz
 - 2GB memory
@@ -29,7 +29,7 @@ Now you have an up to date server.
 
 ** Install Go
 
-Scaleway.com servers use ARM processors so I found it easiest to just install Go on the server and do my buids there.  You could install Go 1.5 locally, target your build and copy it up to your server however you wish.  But that's not how I did it.
+Scaleway.com servers use ARM processors so I found it easiest to just install Go on the server and do my builds there.  You could install Go 1.5 locally, target your build and copy it up to your server however you wish.  But that's not how I did it.
 
   apt-get install golang
 
@@ -45,15 +45,17 @@ Download the code from here:
 
   .link https://github.com/genghisjahn/jwblog/releases/tag/v1.1
 
-I recommend that you make your own git repo with the code.  Be sure to keep the BSD license in place.
+I recommend that you make your own git repo with the release code.  Be sure to keep the BSD license in place.
 
-From inside the cloned directory run:
+From inside the directory run:
 
   go get
 
 ** Build the binary
 
   go build blog.go local.go rewrite.go
+
+Now you _could_ launch the freshly built binary, but you don't have a way to get to it from the outside yet.
 
 ** Install nginx
 
@@ -66,7 +68,7 @@ Make sure you see the nginx startup page by navigating to the public IP address 
 
 Our blog binary is going to be listening on port 8080.  We want to serve requests/responses on port 80.  We need to tell nginx to proxy between 80 and 8080.
 
-Put this inside the *html*{* *}* section of *nginx.conf* file.  IT shou
+Put this inside the *html*{* *}* section of *nginx.conf* file.
 
   server {
    listen         80;
@@ -83,9 +85,9 @@ Put this inside the *html*{* *}* section of *nginx.conf* file.  IT shou
 
 ** Daemonize our blog binary
 
-Simple right?  We're almost there.  We could start our go binary right now by just invoking it, but if it crashes for some reason we want it to start back up.  If we reboot our server, we want the blog server to start up again without us having to do it.  So let's daemonize.
+Simple right?  We're almost there.  We could start our go binary right now by just invoking it from the command line, but if it crashes for some reason we want it to start back up.  If we reboot our server, we want the blog server to start up again without us having to do it.  So let's daemonize.
 
-If you've never seen a System V script before, this may make you a little glassy eyed, but don't worry.  It's mostly boiler plate.  There's only one thing to change, the *dir=* part.  Put the path to the directory that contains the blog binary there.  Keep the double enclosing double quotes.
+If you've never seen a [[http://www.cyberciti.biz/tips/linux-write-sys-v-init-script-to-start-stop-service.html][System V]] script before, this may make you a little glassy eyed, but don't worry, it's mostly boiler plate.  There's only one thing to change, the *dir=* part.  Put in the path to the directory that contains the blog binary there.  Keep the enclosing double quotes.
 
   #!/bin/sh
   ### BEGIN INIT INFO
@@ -194,4 +196,4 @@ Now, at the terminal prompt on your server type:
 
   service blog start
 
-Your blog server should be running.  Check your IP address http://YOUR_IP or the URL of the domain name you registered and you should see the sample content.
+Your blog server should be running.  Check your IP address http://YOUR_IP and you should see the sample content.  Set your domain via DNS to your IP and you're all done.
