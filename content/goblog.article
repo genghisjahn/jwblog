@@ -39,11 +39,13 @@ As of now that installs version 1.3.3:
 
 Be sure to set your [[https://golang.org/doc/code.html#GOPATH][GOPATH]]
 
-** Git the code
+** Get the code
 
-Run
+Download the code from here:
 
-  git clone blahblahblah
+  .link https://github.com/genghisjahn/jwblog/releases/tag/v1.1
+
+I recommend that you make your own git repo with the code.  Be sure to keep the BSD license in place.
 
 From inside the cloned directory run:
 
