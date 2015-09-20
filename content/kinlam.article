@@ -1,0 +1,17 @@
+Using Kinesis to launch Golang inside AWS Lambda
+26 Sep 2015
+Tags: aws, lambda, kinesis, golang
+
+Jon Wear
+
+* temp
+
+Here's you you launch a Kinesis shard.
+
+Here's how you make a go binary.
+
+Target for Linux.
+
+Load inside AWS Lambda.
+
+Poke holes in Security Group
