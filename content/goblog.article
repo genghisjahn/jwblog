@@ -197,3 +197,5 @@ Now, at the terminal prompt on your server type:
   service blog start
 
 Your blog server should be running.  Check your IP address http://YOUR_IP and you should see the sample content.  Set your domain via DNS to your IP and you're all done.
+
+Comment on my [[https://www.reddit.com/r/jonwearblogposts/comments/3ln1vg/your_own_go_blog/][subreddit]].
