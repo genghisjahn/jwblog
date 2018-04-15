@@ -6,7 +6,7 @@ Jon Wear
 
 * temp
 
-_This_post_is_update_for_my_Go_Blog_Go_post_ [[http://www.jonwear.com/goblog][Go BLog Go]].
+_This_post_is_update_for_my_Go_Blog_Go_post_ [[http://www.jonwear.com/goblog][Go Blog Go]].
 
 What a difference 2 and 1/2 years makes.  Not only has the blog setup changed a bit, but when I tried to use my previous post to help me setup my blog on a new Scaleway server, I realized that there were several errors and ommisions.  I'll try to correct them here.
 
@@ -16,7 +16,7 @@ I continue to use [[http://www.scaleway.com][www.scaleway.com]].  Same low price
 
 But! When you select the server image (wherever you do it) be sure to select an LTS version.  Mistakenly I chose a non-LTS image (Ubuntu Vivid) when I initially setup my blog and guess what?  EOL happened sooner than I would have liked.
 
-If you are setting up a Scaleway server for the first time, you'll need to add your SSH public key to the Credentials section of your account.  That way when you're server boots up you'll be able to ssh root@IP_ADDRESS and you're good to go.
+If you are setting up a Scaleway server for the first time, you'll need to add your SSH public key to the Credentials section of your account.  That way when your server boots up you'll be able to ssh root@IP_ADDRESS and you're good to go.
 
 Once you are in, be sure to run:
 
@@ -27,11 +27,11 @@ Now you have an up to date server.
 
 ** Install Go
 
-Scaleway.com servers use ARM processors so I found it easiest to just install Go on the server and do my builds there.  You could install Go 1.5 locally, target your build and copy it up to your server however you wish.  But that's not how I did it.
+Scaleway.com servers use ARM processors so I found it easiest to just install Go on the server and do my builds there.  You could install Go locally, target your build and copy it up to your server however you wish.  But that's not how I did it.
 
   apt-get install golang
 
-As of now that installs version 1.3.3:
+As of now that installs version 1.6.1:
 
   go version go1.6.1 linux/arm
 
