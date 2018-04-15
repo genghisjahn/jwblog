@@ -1,0 +1,133 @@
+Your own Go blog
+15 Apr 2018
+Tags: blog, golang
+
+Jon Wear
+
+* temp
+
+_This_post_is_update_for_my_Go_Blog_Go_post_ [[http://www.jonwear.com/goblog][Go BLog Go]].
+
+What a difference 2 and 1/2 years makes.  Not only has the blog setup changed a bit, but when I tried to use my previous post to help me setup my blog on a new Scaleway server, I realized that there were several errors and ommisions.  I'll try to correct them here.
+
+** Get a server
+
+I continue to use [[http://www.scaleway.com][www.scaleway.com]].  Same low price.  Perfect baremetal server for my low traffic blog.  
+
+But! When you select the server image (wherever you do it) be sure to select an LTS version.  Mistakenly I chose a non-LTS image (Ubuntu Vivid) when I initially setup my blog and guess what?  EOL happened sooner than I would have liked.
+
+If you are setting up a Scaleway server for the first time, you'll need to add your SSH public key to the Credentials section of your account.  That way when you're server boots up you'll be able to ssh root@IP_ADDRESS and you're good to go.
+
+Once you are in, be sure to run:
+
+  apt-get update
+  apt-get upgrade
+
+Now you have an up to date server.
+
+** Install Go
+
+Scaleway.com servers use ARM processors so I found it easiest to just install Go on the server and do my builds there.  You could install Go 1.5 locally, target your build and copy it up to your server however you wish.  But that's not how I did it.
+
+  apt-get install golang
+
+As of now that installs version 1.3.3:
+
+  go version go1.6.1 linux/arm
+
+Be sure to set your [[https://golang.org/doc/code.html#GOPATH][GOPATH]]
+
+** Get the code
+
+Download the code from here:
+
+.link https://github.com/genghisjahn/jwblog/releases/tag/v1.1
+
+I recommend that you make your own git repo with the release code.  Be sure to keep the BSD license in place.
+
+Make sure Git is installed on your server.
+
+From inside the directory run:
+
+  go get
+
+** Build the binary
+
+  go build *.go
+
+Now you _could_ launch the freshly built binary, but you don't have a way to get to it from the outside yet.
+
+** Install nginx
+
+  apt-get install nginx
+  service nginx start
+
+Make sure you see the nginx startup page by navigating to the public IP address of your server.
+
+** Configure nginx
+
+Our blog binary is going to be listening on port 8080.  We want to serve requests/responses on port 80.  We need to tell nginx to proxy between 80 and 8080.
+
+Put this inside the *http*{* *}* section of *nginx.conf* file.
+
+  server {
+   listen         80;
+
+   server_name    IP_Address_or_URL;
+
+   access_log   /var/log/nginx/blog/access.log ;
+   error_log    /var/log/nginx/blog/error.log info ;
+
+   location / {
+      proxy_pass  http://127.0.0.1:8080;
+      }
+   }
+
+Make sure that the path to your access_log and error_log files exist.  
+
+** Daemonize our blog binary
+
+Simple right?  We're almost there.  We could start our go binary right now by just invoking it from the command line, but if it crashes for some reason we want it to start back up.  If we reboot our server, we want the blog server to start up again without us having to do it.  So let's daemonize.
+
+We're on a newer version of Ubuntu now (16.04) so we have to daemoniz using SystemD.  Make a file called blog.service in the path /etc/sysmted/system/.  Be sure that the ConditionPathExists, WorkingDirectory & ExecStart values are set to the correct path on your server.
+
+
+
+    [Unit]
+    Description=Blog
+    ConditionPathExists=/root/go/src/jwblog/blog
+    After=network.target
+
+    [Service]
+    User=root
+    LimitNOFILE=1024
+
+    Restart=on-failure
+    RestartSec=10
+
+    WorkingDirectory=/root/go/src/jwblog
+    ExecStart=/root/go/src/jwblog/blog
+
+    # make sure log directory exists and owned by syslog
+    PermissionsStartOnly=true
+    ExecStartPre=/bin/mkdir -p /var/log/blogservice
+    ExecStartPre=/bin/chown syslog:adm /var/log/blogservice
+    ExecStartPre=/bin/chmod 755 /var/log/blogservice
+    StandardOutput=syslog
+    StandardError=syslog
+    SyslogIdentifier=blogservice
+
+    [Install]
+    WantedBy=multi-user.target
+
+** Start the service!
+
+We're almost there!
+
+Now, at the terminal prompt on your server type:
+
+  systemctl start blog
+
+Your blog server should be running.  Check your IP address http://YOUR_IP and you should see the sample content.  Set your domain via DNS to your IP and you're all done.
+
+Comment on my [[https://www.reddit.com/r/jonwearblogposts/comments/8cgawl/your_own_go_blog_update/][subreddit]].
