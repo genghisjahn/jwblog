@@ -89,7 +89,11 @@ Make sure that the path to your access_log and error_log files exist.
 
 Simple right?  We're almost there.  We could start our go binary right now by just invoking it from the command line, but if it crashes for some reason we want it to start back up.  If we reboot our server, we want the blog server to start up again without us having to do it.  So let's daemonize.
 
-We're on a newer version of Ubuntu now (16.04) so we have to daemoniz using SystemD.  Make a file called blog.service in the path /etc/sysmted/system/.  Be sure that the ConditionPathExists, WorkingDirectory & ExecStart values are set to the correct path on your server.
+We're on a newer version of Ubuntu now (16.04) so we have to daemonize using SystemD.  Make a file called blog.service in the path /etc/sysmted/system/.  Be sure that the following values are set to the correct path on your server:
+
+- ConditionPathExists
+- WorkingDirectory 
+- ExecStart 
 
 
 
