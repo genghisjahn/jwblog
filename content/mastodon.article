@@ -1,0 +1,28 @@
+Mastodon
+19 Apr 2018
+Tags: social media, fediverse, mastodon
+
+Jon Wear
+
+* temp
+
+I didn't get Myspace at all.  The pages were all ugly and I couldn't figure out what everyone was doing.  But when Facebook opened up to the wide world, I signed up quickly to see what it was all about.  I loved it.  I got as many people as I could to sign up for it.  Friends. Colleuges.  Family.  For me to was a great way to connect with people "back home" after I moved away from Texas.  
+
+I signed up for all the social media service.  LinkedIn, Twitter, Ello, Google +, Instagram.  Prolly some others I forgot about.
+
+I knew it was just a matter of time until the ads ruined it all.  Even after they showed up I thought, "it's not so bad."  But it was.  The algoritms, the modified time lines, the suggestions for MORE things you should follow.  And the weird "A friend of friend like a post..."  I left a few times and always went back.  But I gave up FB for Lent this year and then not so long ago we had the Cambridge Analytica fiasco.  Mr. Zuckerburg is in front of the Senate.  I think I'm done.  I think for good this time.
+
+I like most aspects of social media.  But not that way it is now.  Ad-based capitalism is really starting to bother me.  Has for a while.
+
+* Mastodon.  What is it?  
+
+There are lots of articles you can read about it but I'll do my best to summarize it in my own words.  Mastodon is social media that runs on many different servers that are all linked together by a protocol called [[https://en.wikipedia.org/wiki/Mastodon_(software)][Activity Pub]].  
+
+A protocol is tech speak for an agreement between software installations.  You'll also described as _federated_ and _distritubed_.  Email is an example of a federated protocol.  You might have your email service on Gmail.  A friend might be on Yahoo! Mail or AOL mail.  All of you can send messages to each other even though your email is hosted by different companies on different servers in different parts of the world.  Your copper wire telephone is distrubed as well.  You might be on AT&T and someone else on Southwestern Bell but you can still talk to each other.  Or you can call around the world going through all sorts of connections to ring phones just about anywhere in the world.
+
+A Mastodon server (or _instance_) is the same thing for social media.  You can make an account on one server choose to follow (or not) other users on that server.  But you can also follow any user on any other maston server.  All you need is the address or handle of the person and you're good.  Mine is [[https://route66.social/@jon][jon@route66.social]].  I'm the admin on that server and you're welcome to join up.  You could sign up on any Mastodon server you wanted and follow me and I could follow you back.  Messages and pictures that you post to your account will show up for everyone who follows yous, no matter what server they happen to have an account on.
+
+You can have your account be wide open to whoever wants to follow you, or you can lock it and manually approve followers if you're more comfortable with that.  You can block individual accounts from following/interacting with you if you want.  Admins can block users as well or entire instances if a community is contually toxic.  That's what I find most interesting.  If a community(or user) on a server is abusive to others they will find themselves banned from most communities to the point where they can't interact with anyone.  On the other hand, if a community/user is offended by nearly everything anyone says, they can block as well until they effectively block _themselves_ from everyone else.
+
+
+
