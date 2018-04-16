@@ -39,15 +39,15 @@ Be sure to set your [[https://golang.org/doc/code.html#GOPATH][GOPATH]]
 
 ** Get the code
 
+Make sure Git is installed on your server.
+
 Download the code from here:
 
 .link https://github.com/genghisjahn/jwblog/releases/tag/v1.1
 
 I recommend that you make your own git repo with the release code.  Be sure to keep the BSD license in place.
 
-Make sure Git is installed on your server.
-
-From inside the directory run:
+From inside the directory where you downloaded the blog code run:
 
   go get
 
